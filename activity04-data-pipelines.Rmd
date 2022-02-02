@@ -1,6 +1,6 @@
 ---
 title: "Activity 4"
-author: "Name"
+author: "Moreen19"
 output: github_document
 ---
 
@@ -34,6 +34,9 @@ Now, switch this option to `message = TRUE` and knit your report again.
 Discuss what is different when the `message` option is turned on (`TRUE`) and turned off (`FALSE`) for the previous code chunk.
 
 **Response**:
+
+- When the message option is turned on (`TRUE`) the output contains a lot of details on what packages in tidyverse have been attached or loaded but when its turned off (`FALSE`) it doesn't.
+
 
 
 Turn the `message` option off and continue in this activity.
@@ -83,6 +86,7 @@ You can view the entire dataset by clicking on the name of the data frame in the
 Explore and describe what the `message` option does in `load_data` code chunk.
 
 **Response**:
+when turned on the chuck gives more details on spec etc but when turned off it doesn't.
 
 
 Turn the `message` option off and continue in this activity.
@@ -99,7 +103,7 @@ college_recent_grads <- read.csv("data/recent-grads.csv")
 ```
 
 Then, knit this report and look at the output for the `load_data` code chunk.
-What did you notice about the output from these different functions? 
+What did you notice about the output from these different functions?  
 When creating a report, which function would be better to use?
 
 Now, edit the reading in data code in the `load_data` back to what is was originally:
@@ -164,6 +168,10 @@ As you write this process, think of it as a series of steps and it might be help
 
 **Response**:
 
+- The formula for calculating unemployment rate = unemployed/(unemployed+employed)
+- So the variables i would need are, number of those unemployed and employed graduates within each major.Then i would go ahead and use the formula provided to calculate the unemployment rate for each major
+- Finally i'll sort the unemployment rate column from lowest to highest...assuming im using excel. 
+
 
 #### Using `{dplyr}`
 
@@ -171,7 +179,8 @@ In the R code chunk below, name it `rearrange_college`.
 
 Take the `college_recent_grads` dataset, *then* `arrange` the dataset by `unemployment_rate`.
 
-```{r}
+```{r rearrange_college}
+rearrange_college <- arrange(college_recent_grads, unemployment_rate)
 
 ```
 
@@ -184,11 +193,15 @@ Also, notice that by default when you *arrange* by a variable, it defaults to *a
 Use the pipeline that you made in the `rearrange_college` code chunk as the start to this solution, **then** `select` only the variables `rank`, `major`, and `unemployment_rate`.
 Name this code chunk `lowest_unemploy`.
 
-```{r}
-
+```{ r lowest_unemploy}
+lowest_unemploy <- arrange(college_recent_grads, unemployment_rate) % > %
+select(rank, major, unemployment_rate)
 ```
 
-**Response**:
+**Response**:Mathematics and computer science
+
+rearrange_college <- arrange(college_recent_grads, unemployment_rate) % > %
+lowest_unemploy <- select(college_recent_grads, rank, major, unemployment_rate)
 
 
 <img src="README-img/noun_pause.png" alt="pause" width = "20"/> <b>Planned Pause Point</b>: If you feel that you have a good understanding of these commands, feel free to start working on your project. The remainder of this activity will help to expand these commands.
@@ -198,13 +211,14 @@ Name this code chunk `lowest_unemploy`.
 Using the `college_recent_grads` dataset and functions from `{dplyr}`, `arrange` the dataset by `sharewomen`, and `select` only `rank`, `major`, and `sharewomen`. 
 Name your code chunk `highest_prop_women`.
 
-```{r}
-
+```{r highest_prop_women}
+highest_prop_women <- arrange(college_recent_grads, sharewomen) %>%
+select(all_of(c("rank", "major", "sharewomen")))
 ```
 
 Discuss your output as it relates to the research question.
 
-**Response**:
+**Response**:Early childhood education has the highest proportion of women.
 
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
@@ -229,8 +243,10 @@ Using the `stem_categories` vector and knowledge that the median salary for all 
 Only display the variables `major`, `p25th`, `median`, and `p75th`
 Name the code chunk `stem_low_salaries`.
 
-```{r}
+```{r stem_low_salaries}
 
+stem_low_salaries <- select(college_recent_grads, major, p25th, median, p75th) %>%
+subset(median < 36000)
 ```
 
 Discuss your output as it relates to the research question.
