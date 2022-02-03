@@ -254,7 +254,7 @@ the start to this solution, **then** `select` only the variables `rank`,
 `major`, and `unemployment_rate`. Name this code chunk
 `lowest_unemploy`.
 
-`{ r lowest_unemploy} lowest_unemploy <- arrange(college_recent_grads, unemployment_rate) % > % select(rank, major, unemployment_rate)`
+`{ r lowest_unemploy} lowest_unemploy <- rearrange_college %>% select(rank, major, unemployment_rate)`
 
 **Response**:Mathematics and computer science
 
@@ -275,9 +275,25 @@ Using the `college_recent_grads` dataset and functions from `{dplyr}`,
 `major`, and `sharewomen`. Name your code chunk `highest_prop_women`.
 
 ``` r
-highest_prop_women <- arrange(college_recent_grads, sharewomen) %>%
+college_recent_grads %>%
+arrange(desc(sharewomen)) %>%
 select(all_of(c("rank", "major", "sharewomen")))
 ```
+
+    ## # A tibble: 173 x 3
+    ##     rank major                                         sharewomen
+    ##    <dbl> <chr>                                              <dbl>
+    ##  1   165 Early Childhood Education                          0.969
+    ##  2   164 Communication Disorders Sciences And Services      0.968
+    ##  3    52 Medical Assisting Services                         0.928
+    ##  4   139 Elementary Education                               0.924
+    ##  5   151 Family And Consumer Sciences                       0.911
+    ##  6   101 Special Needs Education                            0.907
+    ##  7   157 Human Services And Community Organization          0.906
+    ##  8   152 Social Work                                        0.904
+    ##  9    35 Nursing                                            0.896
+    ## 10    89 Miscellaneous Health Medical Professions           0.881
+    ## # … with 163 more rows
 
 Discuss your output as it relates to the research question.
 
@@ -314,6 +330,27 @@ variables `major`, `p25th`, `median`, and `p75th` Name the code chunk
 `stem_low_salaries`.
 
 ``` r
+college_recent_grads %>%
+filter(grepl(stem_categories, major_category)) %>%
+filter(median < 36000) %>%
+select(major, p25th, median, p75th)
+```
+
+    ## Warning in grepl(stem_categories, major_category): argument 'pattern' has length
+    ## > 1 and only the first element will be used
+
+    ## # A tibble: 7 x 4
+    ##   major                 p25th median p75th
+    ##   <chr>                 <dbl>  <dbl> <dbl>
+    ## 1 Environmental Science 25000  35600 40200
+    ## 2 Physiology            20000  35000 50000
+    ## 3 Neuroscience          30000  35000 44000
+    ## 4 Miscellaneous Biology 23000  33500 48000
+    ## 5 Biology               24000  33400 45000
+    ## 6 Ecology               23000  33000 42000
+    ## 7 Zoology               20000  26000 39000
+
+``` r
 stem_low_salaries <- select(college_recent_grads, major, p25th, median, p75th) %>%
 subset(median < 36000)
 ```
@@ -321,6 +358,9 @@ subset(median < 36000)
 Discuss your output as it relates to the research question.
 
 **Response**:
+
+There are seven stem majors that have salaries that are below the median
+salary for all majors.
 
 ![](README-img/noun_pause.png) **(Final) Planned Pause Point**: If you
 have any questions, contact your instructor. Otherwise feel free to

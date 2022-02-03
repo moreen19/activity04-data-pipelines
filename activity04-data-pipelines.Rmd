@@ -194,7 +194,7 @@ Use the pipeline that you made in the `rearrange_college` code chunk as the star
 Name this code chunk `lowest_unemploy`.
 
 ```{ r lowest_unemploy}
-lowest_unemploy <- arrange(college_recent_grads, unemployment_rate) % > %
+lowest_unemploy <- rearrange_college %>%
 select(rank, major, unemployment_rate)
 ```
 
@@ -212,7 +212,8 @@ Using the `college_recent_grads` dataset and functions from `{dplyr}`, `arrange`
 Name your code chunk `highest_prop_women`.
 
 ```{r highest_prop_women}
-highest_prop_women <- arrange(college_recent_grads, sharewomen) %>%
+college_recent_grads %>%
+arrange(desc(sharewomen)) %>%
 select(all_of(c("rank", "major", "sharewomen")))
 ```
 
@@ -244,6 +245,11 @@ Only display the variables `major`, `p25th`, `median`, and `p75th`
 Name the code chunk `stem_low_salaries`.
 
 ```{r stem_low_salaries}
+college_recent_grads %>%
+filter(grepl(stem_categories, major_category)) %>%
+filter(median < 36000) %>%
+select(major, p25th, median, p75th)
+
 
 stem_low_salaries <- select(college_recent_grads, major, p25th, median, p75th) %>%
 subset(median < 36000)
@@ -252,6 +258,8 @@ subset(median < 36000)
 Discuss your output as it relates to the research question.
 
 **Response**:
+
+There are seven stem majors that have salaries that are below the median salary for all majors.
 
 
 ![](README-img/noun_pause.png) **(Final) Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
